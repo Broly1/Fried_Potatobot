@@ -23,9 +23,9 @@ miles_rate = 0.51
 stors_rate = 10.00
 deadstack_cases_rate = 00.10
 casecount_carted_rate = 0.05
-pre_postrip_rate = 6.00
+prepostrip_rate = 6.00
 intertripe_inspection_rate = 4.50
-repositions_drop_hooks_rate = 4.50
+drop_trailer_repositions_rate = 4.50
 hourlly_delay_rate = 13.15
 meeting_dalay_rate = 21.00
 
@@ -66,20 +66,6 @@ def miles_driven(update: Update, context: CallbackContext) -> int:
     user_data = context.user_data
     user_data["miles_driven"] = update.message.text
 
-    update.message.reply_text("How many stors:")
-    return 17
-
-
-def stors_count(update: Update, context: CallbackContext) -> int:
-    user_data = context.user_data
-    user_data["stors_count"] = update.message.text
-    
-    update.message.reply_text("How many carted cases:")
-    return 18
-
-def casecount_carted(update: Update, context: CallbackContext) -> int:
-    user_data = context.user_data
-    user_data["casecount_carted"] = update.message.text
     update.message.reply_text("deadstack cases:")
     return 11
 
@@ -128,14 +114,31 @@ def metting_delay(update: Update, context: CallbackContext) -> int:
     user_data = context.user_data
     user_data["metting_delay"] = update.message.text
     
+    
+    update.message.reply_text("How many stors:")
+    return 17
+
+
+def stors_count(update: Update, context: CallbackContext) -> int:
+    user_data = context.user_data
+    user_data["stors_count"] = update.message.text
+    
+    update.message.reply_text("How many carted cases:")
+    return 18
+
+def casecount_carted(update: Update, context: CallbackContext) -> int:
+    user_data = context.user_data
+    user_data["casecount_carted"] = update.message.text
+    
     # rate value calculation
     pay = \
         float(user_data["miles_driven"]) * float(miles_rate) + \
+        float(user_data["deadstack_cases"]) * float(deadstack_cases_rate) + \
         float(user_data["stors_count"]) * float(stors_rate) + \
         float(user_data["casecount_carted"]) * float(casecount_carted_rate) + \
-        float(user_data["prepostrip_inspections"]) * float(pre_postrip_rate) + \
+        float(user_data["prepostrip_inspections"]) * float(prepostrip_rate) + \
         float(user_data["intertrip_inspections"]) * float(intertripe_inspection_rate) + \
-        float(user_data["drop_trailer_repositions"]) * float(repositions_drop_hooks_rate) + \
+        float(user_data["drop_trailer_repositions"]) * float(drop_trailer_repositions_rate) + \
         float(user_data["delay_time"]) * float(hourlly_delay_rate) + \
         float(user_data["metting_delay"]) * float(meeting_dalay_rate)
     update.message.reply_text("Pay: %s" % pay)
